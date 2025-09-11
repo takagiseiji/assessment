@@ -6,7 +6,7 @@ const tweetDivision = document.getElementById('tweet-area');
 
 assessmentButton.addEventListener(
   'click',
-  () => { //無名巻子でアロー関数　イベントを検知したら実行される
+  () => { //無名関数でアロー関数　イベントを検知したら実行される
         const userName = userNameInput.value; //入力欄の値を取得
         if(userName.length===0){ //入力が空だったら
             //名前が空の時は処理を終了する
@@ -20,16 +20,11 @@ assessmentButton.addEventListener(
     while(resultDivision.firstChild){ //resultDivision子要素配列の先頭に子要素があったら実行(ある限り)
         resultDivision.removeChild(resultDivision.firstChild) //一番上にある子要素を削除
     }
-    //tweetDivisionに子要素があれば削除し続ける
-    while(tweetDivision.firstChild){ //tweetDivision子要素配列の先頭に子要素があったら実行
-        tweetDivision.removeChild(tweetDivision.firstChild); //一番上にある子要素を削除
-    }
-
+    
     const header = document.createElement('h3'); //h3タグの作成
     header.innerText = '診断結果'; //タグの内側のテキストを設定
     resultDivision.appendChild(header); //divタグの子要素としてh3タグ追加
     
-
     const paragraph = document.createElement('p'); //pタグの作成
     const result = assessment(userName) //診断結果を作成
     paragraph.innerText = result; //pタグの内側のテキストを設定
@@ -37,10 +32,25 @@ assessmentButton.addEventListener(
 
     console.log(assessment(userName)); //ログ出力をして確認
 
+    //ツイート(ポスト)エリアの作成
+    //tweetDivisionに子要素があれば削除し続ける
+    while(tweetDivision.firstChild){ //tweetDivision子要素配列の先頭に子要素があったら実行
+        tweetDivision.removeChild(tweetDivision.firstChild); //一番上にある子要素を削除
+    }
 
+    const anchor = document.createElement('a');
+    const hrefValue = 'https://twitter.com/intent/tweet?button_hashtag=' + 
+    encodeURIComponent('あなたのいいところ') + '&ref_src=twsrc%5Etfw';
 
-    // TODO 診断結果表示エリアの作成
-    // TODO ツイートエリアの作成
+    anchor.setAttribute('href',hrefValue);
+    anchor.setAttribute('class','twitter-hashtag-button');
+    anchor.setAttribute('data-text',result);
+    anchor.innerText = 'Tweet #あなたのいいところ';
+    tweetDivision.appendChild(anchor);
+
+    const script =  document.createElement('script');
+    script.setAttribute('src','https://platform.twitter.com/widgets.js');
+    tweetDivision.appendChild(script)
   }
 );
 
@@ -130,3 +140,4 @@ function test(){
 };
 
 test();
+
