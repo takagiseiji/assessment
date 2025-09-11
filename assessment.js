@@ -44,6 +44,15 @@ assessmentButton.addEventListener(
   }
 );
 
+//Enterキーが押された時も表示
+userNameInput.addEventListener( //イベント検知の追加
+    'keydown', //キー入力検知
+    (event)=>{  //多分event書いた理由はそこに入力されたキーを保存させるため
+        if(event.code==='Enter'){ //押されたキーがEnterなら実行
+            assessmentButton.dispatchEvent(new Event('click'));
+        }
+    }
+)
 const answers = [
     '###userName###のいいところは声です。###userName###の特徴的な声は皆を惹きつけ、心に残ります。',
     '###userName###のいいところはまなざしです。###userName###に見つめられた人は、気になって仕方がないでしょう。',
@@ -119,4 +128,5 @@ function test(){
  console.assert('太郎')===assessment('太郎') //userNameが同じかの確認
   console.log('同じ名前なら、同じ結果を出力することのテスト終了');
 };
+
 test();
