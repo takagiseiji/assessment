@@ -1,14 +1,14 @@
 'use strict';
-const userNameInput = document.getElementById('User-name');
+const userNameInput = document.getElementById('user-name');
 const assessmentButton = document.getElementById('assessment');
 const resultDivision = document.getElementById('result-area');
 const tweetDivision = document.getElementById('tweet-area');
 
 assessmentButton.addEventListener(
   'click',
-  () => { //無名関数でアロー関数　イベントを検知したら実行される
+  () => { //無名巻子でアロー関数　イベントを検知したら実行される
         const userName = userNameInput.value; //入力欄の値を取得
-        if(userName.length===0){ //入力が空だったら
+        if(userName.length === 0){ //入力が空だったら
             //名前が空の時は処理を終了する
             return;
         }
@@ -20,15 +20,30 @@ assessmentButton.addEventListener(
     while(resultDivision.firstChild){ //resultDivision子要素配列の先頭に子要素があったら実行(ある限り)
         resultDivision.removeChild(resultDivision.firstChild) //一番上にある子要素を削除
     }
-    
-    const header = document.createElement('h3'); //h3タグの作成
-    header.innerText = '診断結果'; //タグの内側のテキストを設定
-    resultDivision.appendChild(header); //divタグの子要素としてh3タグ追加
-    
+
+    // headerDivision の作成
+    const headerDivision = document.createElement('div'); //divタグの作成
+    headerDivision.setAttribute('class', 'card-header text-bg-primary'); //多分カードヘッダの色設定
+    headerDivision.innerText = '診断結果'; //タグの内側のテキストを設定
+
+    // bodyDivision の作成
+    const bodyDivision = document.createElement('div'); //divタグの作成
+    bodyDivision.setAttribute('class', 'card-body'); //bootstrap用のclassを設定
+
     const paragraph = document.createElement('p'); //pタグの作成
-    const result = assessment(userName) //診断結果を作成
+    paragraph.setAttribute('class', 'card-text'); //class設定
+    const result = assessment(userName); //診断結果を作成
     paragraph.innerText = result; //pタグの内側のテキストを設定
-    resultDivision.appendChild(paragraph); //divタグの子要素としてpタグ追加
+    bodyDivision.appendChild(paragraph); //divタグの子要素としてpタグを追加
+
+    // resultDivision に Bootstrap のスタイルを適用する
+    resultDivision.setAttribute('class', 'card');
+
+    // headerDivision と bodyDivision を resultDivision に差し込む
+    resultDivision.appendChild(headerDivision); //divタグの子要素としてdivタグ追加
+    resultDivision.appendChild(bodyDivision); //divタグの子要素としてdivタグ追加
+
+    
 
     console.log(assessment(userName)); //ログ出力をして確認
 
@@ -51,10 +66,10 @@ assessmentButton.addEventListener(
     const script =  document.createElement('script');
     script.setAttribute('src','https://platform.twitter.com/widgets.js');
     tweetDivision.appendChild(script)
+
   }
 );
 
-//Enterキーが押された時も表示
 userNameInput.addEventListener( //イベント検知の追加
     'keydown', //キー入力検知
     (event)=>{  //多分event書いた理由はそこに入力されたキーを保存させるため
@@ -62,7 +77,8 @@ userNameInput.addEventListener( //イベント検知の追加
             assessmentButton.dispatchEvent(new Event('click'));
         }
     }
-)
+);
+
 const answers = [
     '###userName###のいいところは声です。###userName###の特徴的な声は皆を惹きつけ、心に残ります。',
     '###userName###のいいところはまなざしです。###userName###に見つめられた人は、気になって仕方がないでしょう。',
@@ -138,6 +154,4 @@ function test(){
  console.assert('太郎')===assessment('太郎') //userNameが同じかの確認
   console.log('同じ名前なら、同じ結果を出力することのテスト終了');
 };
-
 test();
-
